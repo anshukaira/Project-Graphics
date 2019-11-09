@@ -1,11 +1,5 @@
-// In this program the camera orbits a lit moon to simulate the phases of the
-// moon.
 
-#ifdef __APPLE_CC__
-#include <GLUT/glut.h>
-#else
 #include <GL/glut.h>
-#endif
 #include <cmath>
 
 // The moon is a sphere of radius 1 centered at the origin, built from 25
@@ -19,6 +13,7 @@ public:
     glNewList(displayListId, GL_COMPILE);//creates or replaces a display list
     GLfloat direction[] = {-1.0, -1.0, -1.0, 0.0};//for directions
     glLightfv(GL_LIGHT0, GL_POSITION, direction);//changes the lightning maybe the source of lightining
+    glColor3f(1,1,1);
     glutSolidSphere(1.0, 25, 25);//radius, slices(no of subdivisions around z axis, longitude), stacks(..,similar to lattitude)
     glEndList();//endsthe list. as it might remove the id that is created during the glnewlist
   }
@@ -80,12 +75,12 @@ void reshape(GLint w, GLint h) {
   gluPerspective(40.0, GLfloat(w) / GLfloat(h), 1.0, 10.0);
 }
 
-// Enables depth testing, enables lighting for a bright yellowish diffuse
+// Enables depth testing, enables lighting for a bright pinkish diffuse
 // light, and creates a moon.
 void init() {
   glEnable(GL_DEPTH_TEST);
-  GLfloat yellow[] = {1.0, 1.0, 0.5, 1.0};
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, yellow);
+  GLfloat pink[] = {0.8, 0, 0.4, 1.0};
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, pink);
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
   moon.create();
@@ -94,7 +89,7 @@ void init() {
 // The usual application code.
 int main(int argc, char** argv) {
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowPosition(80, 80);
   glutInitWindowSize(500, 500);
   glutCreateWindow("The Moon");
