@@ -3,7 +3,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include <SOIL/SOIL.h>
+#include <SOIL.h>
 
 GLuint texEarth;
 GLUquadricObj *pSphere = NULL;
@@ -13,6 +13,8 @@ void draw_sun();
 static void display(void );
 static void ResizeWindow(int w, int h);
 
+float size;
+
 GLuint loadTex(const char* filename)
 {
     GLuint tex_ID = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,(SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT));
@@ -20,11 +22,21 @@ GLuint loadTex(const char* filename)
         glBindTexture( GL_TEXTURE_2D, tex_ID );
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         return tex_ID;
-    }
+}
+
+void timer(int)
+{
+    size += 0.005;
+	glutPostRedisplay(); // post for display func
+    if(size >= 2) size = 2;
+	glutTimerFunc(100, timer, 0); // limit frame drawing to 100fps
+}
+
 
 void OpenGLInit(void)
 {
-    glShadeModel( GL_FLAT );
+    // adds shading glsmooth, glFlat
+    glShadeModel( GL_SMOOTH );
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
     glClearDepth( 1.0 );
     glEnable( GL_DEPTH_TEST);
@@ -32,14 +44,16 @@ void OpenGLInit(void)
     gluQuadricDrawStyle(pSphere, GLU_FILL);
     gluQuadricNormals(pSphere, GLU_SMOOTH);
     gluQuadricTexture(pSphere, GLU_TRUE);
+    timer(0);
 }
+
 
 static void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D,texEarth);
-    GLfloat pos[] = { 0.0, 0.0, 1.0, 0.0 };
+    GLfloat pos[] = { -1.0, -1.0, -1.0, 0.0 };
     glLightfv(GL_LIGHT0, GL_POSITION, pos);
     glColor3f(1.0,1.0,1.0);
     glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -48,7 +62,7 @@ static void display(void)
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -10.0f);
     glRotatef( -90.0, 1.0, 0.0, 0.0 );
-    gluSphere(pSphere, 1.0, 25, 25);
+    gluSphere(pSphere, size, 25, 25);
     glDisable(GL_TEXTURE_2D);
     glPopMatrix();
     glutSwapBuffers();
@@ -58,7 +72,7 @@ static void display(void)
 
 void initTex()
 {
-    texEarth = loadTex("something.jpeg");  
+    texEarth = loadTex("pink-star.jpg");  
 }
 
 void draw_sun()
@@ -90,7 +104,7 @@ int main( int argc, char** argv )
 {
 
     glutInit(&argc,argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
     glutInitWindowPosition( 0, 0 );
     glutInitWindowSize( 1200, 900);
     glutCreateWindow( "Solar System" );
@@ -98,6 +112,7 @@ int main( int argc, char** argv )
     initTex();
     glutReshapeFunc(ResizeWindow);
     glutDisplayFunc(display);
+    glutTimerFunc(0,timer,0);
     glutMainLoop();
     return(0);
 }
