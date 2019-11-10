@@ -26,13 +26,13 @@ void fillVerts()
     double x0 = 0.1;
     double y0 = 0.1;
     double z0 = 0;
-    for( unsigned int i = 0; i < 10000; i++ ) 
+    for( unsigned int i = 0; i < 5000; i++ ) 
     {
         // changing rgb values for different loops
         // till 20000 inner circles are black
 
         // most outer
-        if(i == 5000)
+        if(i == 2000)
         {
             cur.r = 0.41;
             cur.g = 0.004;
@@ -49,7 +49,7 @@ void fillVerts()
         }
 
         // major color
-        if(i == 9000)
+        if(i == 4000)
         {
             cur.r = 1.0f;
             cur.g = 0.753f;
@@ -57,8 +57,8 @@ void fillVerts()
         }
 
         // formula for the curve
-        const double x1 = x0 + h * a * (y0 - x0);
-        const double y1 = y0 + h * (x0 * (b - z0) - y0);
+        const double x1 = x0 + h * a * (y0 - x0) ;
+        const double y1 = y0 + h * (x0 * (b - z0) - y0) ;
         const double z1 = z0 + h * (x0 * y0 - c * z0);
         x0 = -x1;
         y0 = -y1;
