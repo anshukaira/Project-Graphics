@@ -34,6 +34,7 @@ void mouseW1(int button, int state, int x, int y) {
             // to know a loop is formed
             Cline.clear();
         } else {
+            // entering simplified points into the cp array
             Cline.push_back(CP);
         }
     }

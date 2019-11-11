@@ -31,7 +31,8 @@ static GLint axis = 2;
 
 
 
-// to chk if the point matches the first point drawn(pushed in the array)
+// to chk if the point matches the first point drawn (pushed in the array)
+
 bool checkIsFirst(Point p1, std::vector<point> line) {
     if (line.size() == 0) return 0;
     else {
@@ -43,19 +44,8 @@ bool checkIsFirst(Point p1, std::vector<point> line) {
     }
 }
 
-point pointSimplifier(point p1, std::vector<point> line) {
-    point pres = p1;
-    long double mag = 100;
-    for (point p2 : line) {
-        mag = sqrt(pow(p1.x - p2.x, 2.0) + pow(p1.y - p2.y, 2.0) + pow(p1.z - p2.z, 2.0));
-        if (mag < 7) {
-            pres = p2;
-            break;
-        }
-    }
-    return pres;
-}
 
+// plotting dots on screen using spheres
 
 void drawDot(point p1){
     glPushMatrix();
@@ -65,12 +55,15 @@ void drawDot(point p1){
     glPopMatrix();
 }
 
+// drawing points pushed in the array
 
 void projectAllDots(){
     for(point p: Cline){
         drawDot(p);
     }
 }
+
+// plotting the line using 2 points
 
 void makeLine(point p1, point p2) {
     GLfloat pf1[3]={p1.x, p1.y, p1.z};
@@ -86,6 +79,7 @@ void makeLine(point p1, point p2) {
 }
 
 // creating 3d view by lines in z direction 
+
 void createSides( std::vector<point> line){
     for(point p:line){
         point p1(p.x,p.y,0.0);
@@ -93,6 +87,9 @@ void createSides( std::vector<point> line){
         makeLine(p1, p2);
     }
 }
+
+// Draw the line in 3d view
+// colors can be changed here
 
 void drawLineLoop( std::vector<point> line){
     glPushMatrix();
@@ -106,6 +103,8 @@ void drawLineLoop( std::vector<point> line){
     glPopMatrix();
     glEnd();
 }
+
+// drawing lines from consective pairs from the array of points (Cline) in 2d
 
 void drawLines() {
     
@@ -125,6 +124,23 @@ void drawLines() {
     }
 }
 
+// calculating the points because of the dumb graphics co-ordinate system according to the initial window size
+
+point pointSimplifier(point p1, std::vector<point> line) {
+    point pres = p1;
+    long double mag = 100;
+    for (point p2 : line) {
+        mag = sqrt(pow(p1.x - p2.x, 2.0) + pow(p1.y - p2.y, 2.0) + pow(p1.z - p2.z, 2.0));
+        if (mag < 7) {
+            pres = p2;
+            break;
+        }
+    }
+    return pres;
+}
+
+// converting the points to be plotted on window2
+
 point converter(point val){
     point t(0.0,0.0,0.0);
     t.x=(val.x-wMid)/200;
@@ -132,6 +148,8 @@ point converter(point val){
     t.z=(val.z)/2;
     return t;
 }
+
+// creating a line from the converted points
 
 Line convertToIdentityForm(Line l){
     Line t;
