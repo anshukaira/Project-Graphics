@@ -20,7 +20,10 @@ static std::vector<Line> lines;
 static GLfloat size = -0.3;
 static GLfloat vision [3]={0.0,45.0,1.0};
 static GLdouble theta[3] = {0.0, 0.0, 0.0};
-static GLfloat colors [] [3]={{1.0,0.0,0.0},{0.0,1.0,0.0},{0.0,0.0,1.0},{1.0,1.0,1.0}};
+static GLfloat colors [] [3]={  {1.0,0.0,0.0},
+                                {0.0,1.0,0.0},
+                                {0.0,0.0,1.0},
+                                {1.0,1.0,1.0}}; // rgbw color array
 static GLint color=3;
 static float height=500,width=400,hMid=250,wMid=200;
 static GLint axis = 2;
@@ -28,13 +31,7 @@ static GLint axis = 2;
 
 
 
-point converter(point val){
-    point t(0.0,0.0,0.0);
-    t.x=(val.x-wMid)/200;
-    t.y=(val.y-hMid)/200;
-    t.z=(val.z)/2;
-    return t;
-}
+// to chk if the point matches the first point drawn(pushed in the array)
 bool checkIsFirst(Point p1, std::vector<point> line) {
     if (line.size() == 0) return 0;
     else {
@@ -59,12 +56,15 @@ point pointSimplifier(point p1, std::vector<point> line) {
     return pres;
 }
 
+
 void drawDot(point p1){
     glPushMatrix();
-    glTranslatef(p1.x  , p1.y, p1.z);
+    // doesn't display points with glvertex3f 
+    glTranslatef(p1.x , p1.y, p1.z);
     glutSolidSphere(1.0, 100, 100);
     glPopMatrix();
 }
+
 
 void projectAllDots(){
     for(point p: Cline){
@@ -78,7 +78,6 @@ void makeLine(point p1, point p2) {
     glPushMatrix();
     glBegin(GL_LINES);
     glColor3f(colors[color][0],colors[color][1],colors[color][2]);
-    
     glLineWidth(3);
     glVertex3fv(pf1);
     glVertex3fv(pf2);
@@ -86,7 +85,8 @@ void makeLine(point p1, point p2) {
     glPopMatrix();
 }
 
-void fillSides( std::vector<point> line){
+// creating 3d view by lines in z direction 
+void createSides( std::vector<point> line){
     for(point p:line){
         point p1(p.x,p.y,0.0);
         point p2(p.x,p.y,size);
@@ -101,31 +101,36 @@ void drawLineLoop( std::vector<point> line){
     for (point p2 : line) {
         const GLfloat v[3]={p2.x, p2.y, p2.z};
         glColor3f(colors[color][0],colors[color][1],colors[color][2]);
-        //printf("\n%f %f %f \n",(float)v[0],(float) v[1],(float) v[2]);
         glVertex2fv(v);
     }
     glPopMatrix();
     glEnd();
-
-    
 }
 
 void drawLines() {
     
     point pre(0,0,0);
     int size = Cline.size();
+    // if more than 1 point then a line can be drawn
     if (size > 1) {
-        pre = Cline.front();
+        pre = Cline.front(); // first val in the vector
         for (point p : Cline) {
             makeLine(pre, p);
             pre.x = p.x;
             pre.y = p.y;
             pre.z = p.z;
         }
-        
     }else{
         pre=Point(0,0,0);
     }
+}
+
+point converter(point val){
+    point t(0.0,0.0,0.0);
+    t.x=(val.x-wMid)/200;
+    t.y=(val.y-hMid)/200;
+    t.z=(val.z)/2;
+    return t;
 }
 
 Line convertToIdentityForm(Line l){
@@ -137,8 +142,17 @@ Line convertToIdentityForm(Line l){
     return t;
 }
 
-void spingCube(){
+// rotating effect for the idle funct
+
+void axisTimer(int){
+
+    glutPostRedisplay();
+    glutTimerFunc(5,axisTimer, 0);
+}
+
+void rotation(){
     theta[axis] +=1.0;
     if(theta[axis]>360) theta[axis]-=360;
     glutPostRedisplay();
+    glutTimerFunc(0,axisTimer, 5);
 }

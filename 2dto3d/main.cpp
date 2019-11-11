@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
     glutCreateWindow("3D Viewer");
     glutKeyboardFunc(mykeyboardW2);
     glClearColor(0.0, 0.0, 0.0, 0.0);
-    glutIdleFunc(spingCube);
+    glutIdleFunc(rotation);
     gluOrtho2D(0, 400, 0, 500);
     glutDisplayFunc(displayW2);
     glutMouseFunc(mouseW2);

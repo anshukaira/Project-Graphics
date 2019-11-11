@@ -6,19 +6,20 @@ void displayW2(void) {
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity();
     
-    glLoadIdentity();
     if(lines.size()>0){
         
         
         for(Line l: lines){
+            
             l=convertToIdentityForm(l);
+            // to create rotating effect in rotation fuct
             glRotatef(theta[1], 1.0, 0.0, 0.0);
             glRotatef(theta[2], 0.0, 1.0, 0.0);
             glRotatef(theta[3], 0.0, 0.0, 1.0);
             glPushMatrix();
             
             drawLineLoop(l);
-            fillSides(l);
+            createSides(l);
             glTranslatef(0.0, 0.0, size);
             drawLineLoop(l);
             
@@ -37,7 +38,6 @@ void mykeyboardW2(unsigned char key, int x, int y) {
             color=3;
             break;
         case 'r':
-            //red
             color=0;
             break;
         case 'g':
@@ -58,11 +58,14 @@ void mykeyboardW2(unsigned char key, int x, int y) {
     glutPostRedisplay();
 }
 
+
 void mouseW2(int button, int state, int x, int y) {
     if(axis==2){
         axis=0;
         
-    }else        axis++;
+    }else   axis += 1;
     glutPostRedisplay();
 }
+
+
 
