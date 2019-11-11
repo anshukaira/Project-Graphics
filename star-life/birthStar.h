@@ -50,7 +50,7 @@ void birthRender(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glPushMatrix();
-    glTranslatef(-50.0f, -60.0f, 0.0f);
+    glTranslatef(-50.0f, -40.0f, 0.0f);
     glRotatef( rotAngle, 0.0, 1.0, 50.0 );
     gluSphere(pSphere, size, 25, 25);
     glDisable(GL_TEXTURE_2D);
