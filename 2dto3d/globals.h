@@ -27,7 +27,7 @@ static GLfloat colors [] [3]={  {1.0,0.0,0.0},
 static GLint color=3;
 static float height=500,width=400,hMid=250,wMid=200;
 static GLint axis = 2;
-static GLenum drawMode[2] = {GL_LINE_LOOP, GL_TRIANGLES};
+static GLenum drawMode[2] = {GL_LINE_LOOP, GL_TRIANGLE_FAN};
 static GLenum drawingMode = drawMode[0];
 
 

@@ -62,6 +62,13 @@ void mykeyboardW2(unsigned char key, int x, int y) {
             else
                 drawingMode = drawMode[0];
         }
+            break;
+        case 'x':
+        {
+            Cline.clear();
+            lines.clear();
+        }
+            break;
         default:
             break;
     }
