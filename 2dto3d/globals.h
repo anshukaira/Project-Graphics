@@ -27,6 +27,8 @@ static GLfloat colors [] [3]={  {1.0,0.0,0.0},
 static GLint color=3;
 static float height=500,width=400,hMid=250,wMid=200;
 static GLint axis = 2;
+static GLenum drawMode[2] = {GL_LINE_LOOP, GL_TRIANGLES};
+static GLenum drawingMode = drawMode[0];
 
 
 
@@ -93,7 +95,7 @@ void createSides( std::vector<point> line){
 
 void drawLineLoop( std::vector<point> line){
     glPushMatrix();
-    glBegin(GL_LINE_LOOP);
+    glBegin(drawingMode);
     glLineWidth(10);
     for (point p2 : line) {
         const GLfloat v[3]={p2.x, p2.y, p2.z};

@@ -46,12 +46,22 @@ void mykeyboardW2(unsigned char key, int x, int y) {
         case 'b':
             color=2;
             break;
+        // increase width
         case 'i':
             size-=0.01;
             break;
+        // decrease width
         case 'd':
             size+=0.01;
             break;
+        // toggle btw drawing modes 
+        case 's':
+        {
+            if(drawingMode == drawMode[0]) 
+                drawingMode = drawMode[1];
+            else
+                drawingMode = drawMode[0];
+        }
         default:
             break;
     }
